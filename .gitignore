@@ -1,2 +1,5 @@
 fs
 udata-lecatalogue-theme
+mongodb
+redis
+elasticsearch

@@ -1,13 +1,13 @@
 ##########################################
 # Dockerfile for udata
 ##########################################
-
 FROM debian:jessie
-ENV http_proxy http://192.168.2.10:3128
-ENV https_proxy http://192.168.2.10:3128
+ARG proxy
+ENV http_proxy $proxy
+ENV https_proxy $proxy
 
 # File Author / Maintainer
-MAINTAINER Axel Haustant
+MAINTAINER Fabien ANTOINE 
 
 # Install uData system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -22,7 +22,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxml2-dev libxslt1-dev \
     # Misc dependencies
     liblzma-dev libyaml-dev libffi-dev \
-    # uWSGI features
+    # uWSGI rooting features
     libpcre3-dev \
     # Clean up
     && apt-get autoremove\
@@ -32,9 +32,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Install udata and all known plugins
 RUN pip install --proxy $https_proxy --pre udata udata-piwik udata-gouvfr udata-youckan uwsgi gevent raven
 
-RUN mkdir -p /udata/fs
+RUN mkdir -p /udata/fs /src
 
 COPY config/udata.cfg entrypoint.sh /udata/
+
 COPY uwsgi/*.ini /udata/uwsgi/
 
 WORKDIR /udata
