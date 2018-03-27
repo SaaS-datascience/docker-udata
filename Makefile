@@ -1,6 +1,10 @@
 EDITOR=vim
 
+export PORT=80
+
 include /etc/os-release
+dummy               := $(shell touch artifacts)
+include ./artifacts
 
 install-theme:
 ifeq ("$(wildcard udata-lecatalogue-theme/lecatalogue)","")
