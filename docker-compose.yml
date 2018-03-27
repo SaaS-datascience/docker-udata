@@ -1,0 +1,41 @@
+version: '2'
+
+services:
+  mongodb:
+    image: mongo:3.2
+    command: mongod
+    volumes:
+      - /data/bases/udata/mongodb:/data/db
+    ports:
+      - "27017:27017"
+
+  redis:
+    image: redis
+    volumes:
+      - /data/bases/udata/redis:/data
+    ports:
+      - "6379:6379"
+
+  elasticsearch:
+    image: udata/elasticsearch:2.4.5
+    volumes:
+      - /data/bases/udata/elasticsearch:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+
+  udata:
+    image: udata/udata
+    depends_on:
+      - mongodb
+      - redis
+      - elasticsearch
+    volumes:
+      - ./fs:/udata/fs
+      - ./udata-lecatalogue-theme/:/src/lecatalogue
+      - ./config/udata.cfg:/udata/udata.cfg
+      - ./uwsgi:/udata/uwsgi
+    ports:
+      - "80:7000"
+    expose:
+      - "7000"
+
