@@ -1,6 +1,19 @@
+##############################################
+# WARNING : THIS FILE SHOULDN'T BE TOUCHED   #
+#    FOR ENVIRONNEMENT CONFIGURATION         #
+# CONFIGURABLE VARIABLES SHOULD BE OVERRIDED #
+# IN THE 'artifacts' FILE, AS NOT COMMITTED  #
+##############################################
+
 EDITOR=vim
 
+export PORT=80
+export NETWORK=latelier
+
 include /etc/os-release
+
+dummy               := $(shell touch artifacts)
+include ./artifacts
 
 install-theme:
 ifeq ("$(wildcard udata-lecatalogue-theme/lecatalogue)","")
@@ -30,7 +43,7 @@ ifeq ("$(wildcard /usr/bin/docker)","")
 endif
 
 network: 
-	@docker network create latelier 2> /dev/null; true
+	@docker network create ${NETWORK} 2> /dev/null; true
 
 
 up: network install-theme

@@ -1,4 +1,9 @@
-version: '3'
+version: '2'
+
+networks:
+  default:
+    external:
+      name: ${NETWORK}
 
 services:
   mongodb:
@@ -6,8 +11,6 @@ services:
     command: mongod
     volumes:
       - ./mongodb:/data/db
-    ports:
-      - "27017:27017"
 
   redis:
     image: redis
@@ -20,8 +23,6 @@ services:
     image: udata/elasticsearch:2.4.5
     volumes:
       - ./elasticsearch:/usr/share/elasticsearch/data
-    ports:
-      - "9200:9200"
 
   udata:
     image: udata/udata
@@ -35,5 +36,5 @@ services:
       - ./config/udata.cfg:/udata/udata.cfg
       - ./uwsgi:/udata/uwsgi
     ports:
-      - "80:7000"
+      - ${PORT}:7000
 
